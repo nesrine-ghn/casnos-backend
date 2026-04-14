@@ -10,7 +10,7 @@ const app = express();
 const ticketRoutes = require("./routes/tickets");
 
 app.use(cors({
-  origin: ["https://casnos-frontend.vercel.app/", "http://localhost:5173", "http://localhost:5174"],
+  origin: ["https://casnos-frontend.vercel.app", "http://localhost:5173", "http://localhost:5174"],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
