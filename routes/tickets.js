@@ -10,10 +10,10 @@ router.get("/", verifyToken, (req, res) => {
   const sql = `
     SELECT tickets.*, 
       users.firstname, users.lastname,
-      service_catalog.name as service_name
+      servicecatalog.name as service_name
     FROM tickets
     LEFT JOIN users ON tickets.created_by = users.id
-    LEFT JOIN service_catalog ON tickets.service_id = service_catalog.id
+    LEFT JOIN servicecatalog ON tickets.service_id = servicecatalog.id
     ORDER BY tickets.created_at DESC
   `;
   db.query(sql, (err, result) => {
@@ -26,9 +26,9 @@ router.get("/", verifyToken, (req, res) => {
 router.get("/my", verifyToken, (req, res) => {
   const sql = `
     SELECT tickets.*, 
-      service_catalog.name as service_name
+      servicecatalog.name as service_name
     FROM tickets
-    LEFT JOIN service_catalog ON tickets.service_id = service_catalog.id
+    LEFT JOIN servicecatalog ON tickets.service_id = servicecatalog.id
     WHERE tickets.created_by = ?
     ORDER BY tickets.created_at DESC
   `;

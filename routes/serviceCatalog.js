@@ -6,7 +6,7 @@ const { isAdmin } = require("../middleware/isAdmin");
 
 // GET all active services (everyone can see)
 router.get("/", verifyToken, (req, res) => {
-  db.query("SELECT * FROM service_catalog WHERE is_active = 1", (err, result) => {
+  db.query("SELECT * FROM servicecatalog WHERE is_active = 1", (err, result) => {
     if (err) return res.status(500).json({ message: err.message });
     res.json(result);
   });
@@ -17,7 +17,7 @@ router.post("/", verifyToken, isAdmin, (req, res) => {
   const { name, description, category, sla_hours, department_id } = req.body;
   if (!name || !category) return res.status(400).json({ message: "Name and category are required" });
   db.query(
-    "INSERT INTO service_catalog (name, description, category, sla_hours, department_id) VALUES (?,?,?,?,?)",
+    "INSERT INTO servicecatalog (name, description, category, sla_hours, department_id) VALUES (?,?,?,?,?)",
     [name, description, category, sla_hours || 24, department_id || null],
     (err, result) => {
       if (err) return res.status(500).json({ message: err.message });
@@ -30,7 +30,7 @@ router.post("/", verifyToken, isAdmin, (req, res) => {
 router.put("/:id", verifyToken, isAdmin, (req, res) => {
   const { name, description, category, sla_hours, is_active } = req.body;
   db.query(
-    "UPDATE service_catalog SET name=?, description=?, category=?, sla_hours=?, is_active=? WHERE id=?",
+    "UPDATE servicecatalog SET name=?, description=?, category=?, sla_hours=?, is_active=? WHERE id=?",
     [name, description, category, sla_hours, is_active, req.params.id],
     (err) => {
       if (err) return res.status(500).json({ message: err.message });
@@ -41,7 +41,7 @@ router.put("/:id", verifyToken, isAdmin, (req, res) => {
 
 // DELETE service (admin only)
 router.delete("/:id", verifyToken, isAdmin, (req, res) => {
-  db.query("DELETE FROM service_catalog WHERE id=?", [req.params.id], (err) => {
+  db.query("DELETE FROM servicecatalog WHERE id=?", [req.params.id], (err) => {
     if (err) return res.status(500).json({ message: err.message });
     res.json({ message: "Service deleted" });
   });
