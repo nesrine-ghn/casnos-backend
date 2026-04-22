@@ -17,9 +17,34 @@ db.connect((err) => {
     console.log("Database connection failed:", err.message);
   } else {
     console.log("Connected to MySQL");
-    initializeTables(); // Create tables if they don't exist
+    //initializeTabletickets();
   }
 });
+/*
+function initializeTabletickets() {
+  const createupdatedticketsTable = `
+    CREATE TABLE IF NOT EXISTS tickets (
+      id varchar(36) COLLATE utf8mb4_general_ci NOT NULL,
+      title varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+      description text COLLATE utf8mb4_general_ci,
+      priority enum('low','medium','high','critical') COLLATE utf8mb4_general_ci DEFAULT 'medium',
+      status enum('new','assigned','in_progress','resolved','closed') COLLATE utf8mb4_general_ci DEFAULT 'new',
+      created_by varchar(36) COLLATE utf8mb4_general_ci NOT NULL,
+      assigned_to varchar(36) COLLATE utf8mb4_general_ci DEFAULT NULL,
+      service_id int DEFAULT NULL,
+      created_at datetime DEFAULT CURRENT_TIMESTAMP,
+      updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      resolved_at datetime DEFAULT NULL
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+    `;
+  db.query(createupdatedticketsTable, (err) => {
+    if (err) {
+      console.log("⚠️ Error creating tickets table:", err.message);
+    } else {
+      console.log("✅ tickets table ready");
+    }
+  });
+}
 
 // 👇 Auto-create tables on startup
 function initializeTables() {
@@ -69,6 +94,6 @@ function initializeTables() {
     }
   });
 }
-
+*/
 
 module.exports = db;
