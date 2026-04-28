@@ -17,7 +17,11 @@ router.get("/", verifyToken, (req, res) => {
     ORDER BY tickets.created_at DESC
   `;
   db.query(sql, (err, result) => {
-    if (err) return res.status(500).json({ message: err.message });
+    
+    if (err) {
+      console.error("❌ SQL ERROR:", err); // 👈 ADD THIS
+      return res.status(500).json({ message: err.message });
+    }
     res.json(result);
   });
 });
