@@ -56,6 +56,45 @@ router.post("/", verifyToken, (req, res) => {
     }
   );
 });
+// PUT assign ticket to agent (manager only)
+router.put("/:id/assign", verifyToken, async (req, res) => {
+  try {
+    // Only managers can assign
+    if (req.user.role !== "IT Agent Manager" && req.user.role_name !== "Admin") {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    const { assigned_to } = req.body;
+    
+    await db.query(
+      "UPDATE tickets SET status='assigned', assigned_to=?, updated_at=NOW() WHERE id=?",
+      [assigned_to, req.params.id]
+    );
+    
+    res.json({ message: "Ticket assigned successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// GET all IT agents (for assignment dropdown)
+router.get("/agents", verifyToken, (req, res) => {
+  const sql = `
+    SELECT u.id, u.firstname, u.lastname
+    FROM users u
+    INNER JOIN roles r ON u.role_id = r.id
+    WHERE r.name = 'Technician'
+    ORDER BY u.firstname, u.lastname
+  `;
+
+  db.query(sql, (err, rows) => {
+    if (err) {
+      console.error("Agents error:", err);
+      return res.status(500).json({ message: err.message });
+    }
+    res.json(rows);
+  });
+});
 
 // PUT update ticket status (agent + admin)
 router.put("/:id", verifyToken, (req, res) => {

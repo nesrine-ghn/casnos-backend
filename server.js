@@ -8,6 +8,8 @@ const roleRoutes = require("./routes/roles");
 const serviceCatalogRoutes = require("./routes/serviceCatalog");
 const app = express();
 const ticketRoutes = require("./routes/tickets");
+const analyticsRoutes = require("./routes/analytics");
+
 
 app.use(cors({
   origin: ["https://casnos-frontend.vercel.app", "http://localhost:5173", "http://localhost:5174"],
@@ -23,6 +25,7 @@ app.use("/departments", departmentRoutes);
 app.use("/roles", roleRoutes);              
 app.use("/tickets", ticketRoutes);
 app.use("/services", serviceCatalogRoutes);
+app.use("/analytics", analyticsRoutes);
 // Test route
 app.get("/", (req, res) => {
   res.send("CASNOS IT API WORKING");
